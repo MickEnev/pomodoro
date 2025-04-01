@@ -2,27 +2,27 @@ import React, { useState, useEffect } from 'react'
 import '../css/Pomodoro.css'
 
 export default function Pomodoro() {
-  const [minutes, setMinutes] = useState(0);
+  const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    let intervalId;
+    let interval;
 
-    if (isActive) { 
-      intervalId = setInterval(() => {
-        setSeconds(prevSeconds => {
-          if (prevSeconds === 4) {
-            setMinutes(prevMinutes => prevMinutes + 1);
-            return 0;
+      interval = setInterval(() => {
+        if (isActive) {
+          if (seconds > 0) {
+            setSeconds((seconds) => seconds - 1);
+          } else if (minutes > 0) {
+            setMinutes((minutes) => minutes - 1);
+            setSeconds(59);
           }
-          return prevSeconds + 1
-        });
+        }
       }, 1000);
-    }
 
-    return () => clearInterval(intervalId);
-  }, [isActive]);
+    return () => clearInterval(interval);
+  }, [seconds, minutes, isActive]);
+
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -31,12 +31,12 @@ export default function Pomodoro() {
   const resetTimer = () => {
     setIsActive(false);
     setSeconds(0);
-    setMinutes(0);
+    setMinutes(25);
   }
 
   return (
     <div>
-      <h1>Timer: {minutes} minutes {seconds} seconds</h1>
+      <h1>Timer: {minutes} mins {seconds} secs</h1>
       <button onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
       <button onClick={resetTimer}>Reset</button>
     </div>
