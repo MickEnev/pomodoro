@@ -5,14 +5,18 @@ export default function Pomodoro() {
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [userMinutes, setUserMinutes] = useState(25)
-  const [state, setState] = useState(1)
+  const [userMinutes, setUserMinutes] = useState(25);
+  const [userBreakMinutes, setUserBreakMinutes] = useState(5);
+  const [state, setState] = useState(true);
 
   useEffect(() => {
     let interval;
 
       interval = setInterval(() => {
         if (isActive) {
+          if (seconds === 0 && minutes === 0) {
+            switchSession();
+          }
           if (seconds > 0) {
             setSeconds((seconds) => seconds - 1);
           } else if (minutes > 0) {
@@ -25,6 +29,16 @@ export default function Pomodoro() {
     return () => clearInterval(interval);
   }, [seconds, minutes, isActive]);
 
+  const switchSession = () => {
+    setState((prev) => !prev);
+    if (state) {
+      setMinutes(userBreakMinutes);
+    } else {
+      setMinutes(userMinutes);
+    }
+    setSeconds(0);
+    setIsActive(true);
+  };
 
   const toggleTimer = () => {
     setIsActive(!isActive);
@@ -33,20 +47,41 @@ export default function Pomodoro() {
   const resetTimer = () => {
     setIsActive(false);
     setSeconds(0);
-    setMinutes(userMinutes);
+    if (state) {
+      setMinutes(userMinutes);
+    } else {
+      setMinutes(userBreakMinutes);
+    }
+    
   }
 
   const handleSetMinutes = () => {
-    setMinutes(userMinutes);
-    setSeconds(0);
+    if (state) {
+      setMinutes(userMinutes);
+      setSeconds(0);
+    }
+    
   };
 
+  const handleSetBreakMinutes = () => {
+    if (!state) {
+      setMinutes(userBreakMinutes);
+      setSeconds(0);
+    }
+  }
+
   const handleSetFocus = () => {
-    setState(1)
+    setState(true);
+    setIsActive(false);
+    setMinutes(userMinutes);
+    setSeconds(0);
   }
 
   const handleSetBreak= () => {
-    setState(0)
+    setState(false);
+    setIsActive(false);
+    setMinutes(userBreakMinutes);
+    setSeconds(0);
   }
 
   return (
@@ -74,7 +109,12 @@ export default function Pomodoro() {
         </div>
         <div className='break-length-box'>
           <label htmlFor='break-length'>Break Length</label>
-          <input className="break-length" type='text'></input>
+          <input className="break-length" 
+          type='number'
+          value={userBreakMinutes}
+          onChange={(e) => setUserBreakMinutes(e.target.value)}
+          />
+          <button onClick={handleSetBreakMinutes}>{'Set'}</button>
         </div>
       </div>
       
