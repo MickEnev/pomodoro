@@ -1,37 +1,19 @@
-import { createContext, useState, useContext, useEffect } from 'react'
+import { createContext, useState, useContext, useEffect, useRef } from 'react'
 
 const PomodoroContext = createContext()
 
 export const usePomodoroContext = () => useContext(PomodoroContext)
 
 export const PomodoroProvider = ({children}) => {
-const [minutes, setMinutes] = useState(25);
+  const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [userMinutes, setUserMinutes] = useState(25);
   const [userBreakMinutes, setUserBreakMinutes] = useState(5);
   const [state, setState] = useState(true);
-
-  useEffect(() => {
-    let interval;
-
-      interval = setInterval(() => {
-        if (isActive) {
-          if (seconds === 0 && minutes === 0) {
-            switchSession();
-          }
-          if (seconds > 0) {
-            setSeconds((seconds) => seconds - 1);
-          } else if (minutes > 0) {
-            setMinutes((minutes) => minutes - 1);
-            setSeconds(59);
-          }
-        }
-      }, 1000);
-
-    return () => clearInterval(interval);
-  }, [seconds, minutes, isActive]);
-
+  
+  const endTimeRef = useRef(null);
+  
   const switchSession = () => {
     setState((prev) => !prev);
     if (state) {
@@ -41,55 +23,141 @@ const [minutes, setMinutes] = useState(25);
     }
     setSeconds(0);
     setIsActive(true);
+    endTimeRef.current = Date.now() + (state ? userBreakMinutes : userMinutes) * 60000;
   };
 
   const toggleTimer = () => {
+    if (!isActive) {
+      endTimeRef.current = Date.now() + minutes * 60000 + seconds * 1000;
+    }
     setIsActive(!isActive);
   };
+
+  useEffect(() => {
+    let animationFrameId;
+    
+    if (isActive) {
+      if (!endTimeRef.current) {
+        endTimeRef.current = Date.now() + minutes * 60000 + seconds * 1000;
+      }
+      
+      const updateTimer = () => {
+        if (!isActive) return;
+        
+        const now = Date.now();
+        const remaining = Math.max(0, endTimeRef.current - now);
+        
+        if (remaining <= 0) {
+          setMinutes(0);
+          setSeconds(0);
+          endTimeRef.current = null;
+          switchSession();
+          return;
+        }
+        
+        const newMinutes = Math.floor(remaining / 60000);
+        const newSeconds = Math.floor((remaining % 60000) / 1000);
+        
+        setMinutes(newMinutes);
+        setSeconds(newSeconds);
+        
+        animationFrameId = requestAnimationFrame(updateTimer);
+      };
+      
+      animationFrameId = requestAnimationFrame(updateTimer);
+    } else {
+      endTimeRef.current = null;
+    }
+    
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isActive, switchSession]);
+
+
+  // Dynamically changes the tab title to include time TODO: Make update when switching tabs
+  useEffect(() => {
+    if (isActive) {
+        document.title = `${state ? 'Focus' : 'Break'} ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    } else {
+        document.title = "PomoTomo";
+    }
+  }, [isActive, state, minutes, seconds]);
+
+  
 
   const resetTimer = () => {
     setIsActive(false);
     setSeconds(0);
     if (state) {
-      setMinutes(userMinutes);
+      if (userMinutes) {
+        setMinutes(userMinutes);
+      } else {
+        setMinutes(25);
+      }
     } else {
-      setMinutes(userBreakMinutes);
+      if (userBreakMinutes) {
+        setMinutes(userBreakMinutes);
+      } else {
+        setMinutes(5);
+      }
     }
-    
+    endTimeRef.current = null;
   }
 
   const handleSetMinutes = () => {
     if (state) {
-      setMinutes(userMinutes);
+      if (userMinutes) {
+        setMinutes(userMinutes);
+      } else {
+        setMinutes(25);
+      }
       setSeconds(0);
+      endTimeRef.current = null;
     }
-    
   };
 
   const handleSetBreakMinutes = () => {
     if (!state) {
-      setMinutes(userBreakMinutes);
+      if (userBreakMinutes) {
+        setMinutes(userBreakMinutes);
+      } else {
+        setMinutes(5);
+      }
       setSeconds(0);
+      endTimeRef.current = null;
     }
   }
 
   const handleSetFocus = () => {
     setState(true);
     setIsActive(false);
-    setMinutes(userMinutes);
+    if (userMinutes) {
+      setMinutes(userMinutes);
+    } else {
+      setMinutes(25);
+    }
     setSeconds(0);
+    endTimeRef.current = null;
   }
 
-  const handleSetBreak= () => {
+  const handleSetBreak = () => {
     setState(false);
     setIsActive(false);
-    setMinutes(userBreakMinutes);
+    if (userBreakMinutes) {
+      setMinutes(userBreakMinutes);
+    } else {
+      setMinutes(5);
+    }
     setSeconds(0);
+    endTimeRef.current = null;
   }
 
   return (
-  <PomodoroContext.Provider
-    value={{
+    <PomodoroContext.Provider
+      value={{
         minutes,
         seconds,
         isActive,
@@ -105,9 +173,9 @@ const [minutes, setMinutes] = useState(25);
         handleSetBreak,
         setUserMinutes,
         setUserBreakMinutes,
-    }}
+      }}
     >
-        {children}
+      {children}
     </PomodoroContext.Provider>
   );
 };

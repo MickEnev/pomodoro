@@ -24,7 +24,8 @@ export default function Pomodoro() {
     <div className='pomo'>
       <div className='timer-box'>
         {/* TODO: Change this so it says 'Focus' or 'Break' on state change */}
-        <h1>{state ? 'Focus' : 'Break'}: {minutes} mins {seconds} secs</h1>
+        <h1>{state ? 'Focus' : 'Break'}</h1>
+        <h1>{minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}</h1>
         <div className='button-box'>
           <button onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
           <button onClick={resetTimer}>Reset</button>
@@ -61,5 +62,4 @@ export default function Pomodoro() {
 
 // TODO: Add alarm sound
 // Clean up UI
-// Make it so that the timer keeps running even after switching tabs
-// Add ability to pause timer
+// Display state and time on tab TODO: Make it so that it updates correctly when on different tab
