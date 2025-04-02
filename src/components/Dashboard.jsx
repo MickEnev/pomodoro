@@ -15,7 +15,7 @@ export default function Dashboard() {
   return (
     <div className={styles.dashboard}>
       <div className={styles.layout}>
-        <h1 style={{margin: '0 auto', color: '#ffffff'}}> Pomodoro Timer</h1>
+        <h1 style={{margin: '0 auto', color: '#ffffff'}}> PomoTomo</h1>
         <Options selection={selection} setSelection={setSelection}/>
         <div className={styles.content}>{dataRender[selection]}</div>
       </div>

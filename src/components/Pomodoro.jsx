@@ -61,5 +61,4 @@ export default function Pomodoro() {
 
 // TODO: Add alarm sound
 // Clean up UI
-// Make it so that the timer keeps running even after switching tabs
-// Add ability to pause timer
+// Display state and time on tab
