@@ -92,16 +92,28 @@ export const PomodoroProvider = ({children}) => {
     setIsActive(false);
     setSeconds(0);
     if (state) {
-      setMinutes(userMinutes);
+      if (userMinutes) {
+        setMinutes(userMinutes);
+      } else {
+        setMinutes(25);
+      }
     } else {
-      setMinutes(userBreakMinutes);
+      if (userBreakMinutes) {
+        setMinutes(userBreakMinutes);
+      } else {
+        setMinutes(5);
+      }
     }
     endTimeRef.current = null;
   }
 
   const handleSetMinutes = () => {
     if (state) {
-      setMinutes(userMinutes);
+      if (userMinutes) {
+        setMinutes(userMinutes);
+      } else {
+        setMinutes(25);
+      }
       setSeconds(0);
       endTimeRef.current = null;
     }
@@ -109,7 +121,11 @@ export const PomodoroProvider = ({children}) => {
 
   const handleSetBreakMinutes = () => {
     if (!state) {
-      setMinutes(userBreakMinutes);
+      if (userBreakMinutes) {
+        setMinutes(userBreakMinutes);
+      } else {
+        setMinutes(5);
+      }
       setSeconds(0);
       endTimeRef.current = null;
     }
@@ -118,7 +134,11 @@ export const PomodoroProvider = ({children}) => {
   const handleSetFocus = () => {
     setState(true);
     setIsActive(false);
-    setMinutes(userMinutes);
+    if (userMinutes) {
+      setMinutes(userMinutes);
+    } else {
+      setMinutes(25);
+    }
     setSeconds(0);
     endTimeRef.current = null;
   }
@@ -126,7 +146,11 @@ export const PomodoroProvider = ({children}) => {
   const handleSetBreak = () => {
     setState(false);
     setIsActive(false);
-    setMinutes(userBreakMinutes);
+    if (userBreakMinutes) {
+      setMinutes(userBreakMinutes);
+    } else {
+      setMinutes(5);
+    }
     setSeconds(0);
     endTimeRef.current = null;
   }

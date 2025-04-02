@@ -10,8 +10,13 @@
     scrollbar-width: none;
     padding: 10px;
     font-size: 20px;
-    margin-bottom: 700px;
+    
 }
+
+.layout {
+    height: 50vh;
+}
+
 
 .dashboard::-webkit-scrollbar {
     display: none;
@@ -25,6 +30,11 @@ h1 {
 .content {
     display: flex;
     justify-content: center;
-    margin-top: 100px;
-    background: blue;
+    background: rgb(177, 175, 175);
+    padding: 100px;
+    border-radius: 20px;
+    border: solid;
+    border-width: 3.5px;
+    border-color: black;
+    padding-top: 50px;
 }
