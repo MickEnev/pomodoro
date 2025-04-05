@@ -11,6 +11,14 @@ function App() {
       <PomodoroProvider>
         <Dashboard/>
       </PomodoroProvider>
+      <div class="background">
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+        <span class="ball"></span>
+      </div>
     </div>
   )
 }

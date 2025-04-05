@@ -3,6 +3,13 @@ import '../css/Todo.css'
 
 export default function Todo() {
   return (
-    <div>Todo</div>
+    <div className="todo">
+      <ul className="todo-list">
+      <li className="task">Balls</li>
+      <li className="task">Balls</li>
+      <li className="task">Balls</li>
+      <li className="task">Balls</li>
+      </ul>
+    </div>
   )
 }

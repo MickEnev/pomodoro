@@ -78,6 +78,7 @@ export const PomodoroProvider = ({children}) => {
 
   // Dynamically changes the tab title to include time
   useEffect(() => {
+    // Update title independently of clock
     const updateTitle = () => {
       if (isActive) {
         const now = Date.now();
