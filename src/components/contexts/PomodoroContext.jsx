@@ -76,14 +76,35 @@ export const PomodoroProvider = ({children}) => {
     };
   }, [isActive, switchSession]);
 
-
-  // Dynamically changes the tab title to include time TODO: Make update when switching tabs
+  // Dynamically changes the tab title to include time
   useEffect(() => {
-    if (isActive) {
-        document.title = `${state ? 'Focus' : 'Break'} ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    } else {
+    const updateTitle = () => {
+      if (isActive) {
+        const now = Date.now();
+        const remaining = Math.max(0, endTimeRef.current - now);
+        const titleMinutes = Math.floor(remaining / 60000);
+        const titleSeconds = Math.floor((remaining % 60000) / 1000);
+        
+        document.title = `${state ? 'Focus' : 'Break'} ${titleMinutes}:${titleSeconds < 10 ? '0' : ''}${titleSeconds}`;
+      } else {
         document.title = "PomoTomo";
+      }
+    };
+
+    let titleInterval = null;
+
+    if (isActive) {
+      updateTitle();
+      titleInterval = setInterval(updateTitle, 1000);
+    } else {
+      document.title = "PomoTomo";
     }
+
+    return () => {
+      if (titleInterval) {
+        clearInterval(titleInterval);
+      }
+    };
   }, [isActive, state, minutes, seconds]);
 
   
