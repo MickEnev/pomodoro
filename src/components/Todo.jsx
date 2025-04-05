@@ -11,10 +11,10 @@ export default function Todo() {
       Store complted tasks
       Be able to delete tasks rather than mark them complete*/}
       <ul className="todo-list">
-        <li className="task">BallsBalls</li>
-        <li className="task">Balls</li>
-        <li className="task">Balls</li>
-        <li className="task">Balls</li>
+        <li className="task">Test</li>
+        <li className="task">Test</li>
+        <li className="task">Test</li>
+        <li className="task">Test</li>
       </ul>
     </div>
   )
