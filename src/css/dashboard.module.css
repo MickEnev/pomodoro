@@ -10,11 +10,13 @@
     scrollbar-width: none;
     padding: 10px;
     font-size: 20px;
-    
+    font-family: "DynaPuff";
 }
 
 .layout {
-    height: 50vh;
+    height: 80vh;
+    width: 700px;
+    max-width: 700px;
 }
 
 
@@ -30,7 +32,7 @@ h1 {
 .content {
     display: flex;
     justify-content: center;
-    background: rgb(177, 175, 175);
+    background: rgb(157, 179, 182);
     padding: 100px;
     border-radius: 20px;
     border: solid;

@@ -23,14 +23,13 @@ export default function Pomodoro() {
   return (
     <div className='pomo'>
       <div className='timer-box'>
-        {/* TODO: Change this so it says 'Focus' or 'Break' on state change */}
-        <h1>{state ? 'Focus' : 'Break'}</h1>
-        <h1>{minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}</h1>
+        <h1 className="state">{state ? 'Focus' : 'Break'}</h1>
+        <h1 className="time">{minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}</h1>
         <div className='button-box'>
-          <button onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
-          <button onClick={resetTimer}>Reset</button>
-          <button onClick={handleSetFocus}>Focus</button>
-          <button onClick={handleSetBreak}>Break</button>
+          <button className="button-17" onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
+          <button className="button-17" onClick={resetTimer}>Reset</button>
+          <button className="button-17" onClick={handleSetFocus}>Focus</button>
+          <button className="button-17" onClick={handleSetBreak}>Break</button>
         </div>
       </div>
       <div className='control-box'>
@@ -42,7 +41,7 @@ export default function Pomodoro() {
           value={userMinutes}
           onChange={(e) => setUserMinutes(e.target.value)}
           />
-          <button onClick={handleSetMinutes}>{'Set'}</button>
+          <button className="button-17" onClick={handleSetMinutes}>{'Set'}</button>
         </div>
         <div className='break-length-box'>
           <label htmlFor='break-length'>Break Length</label>
@@ -51,7 +50,7 @@ export default function Pomodoro() {
           value={userBreakMinutes}
           onChange={(e) => setUserBreakMinutes(e.target.value)}
           />
-          <button onClick={handleSetBreakMinutes}>{'Set'}</button>
+          <button className="button-17" onClick={handleSetBreakMinutes}>{'Set'}</button>
         </div>
       </div>
       
