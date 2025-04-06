@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect, useRef } from 'react'
+import { createContext, useState, useContext, useEffect, useRef, use } from 'react'
 
 const PomodoroContext = createContext()
 
@@ -10,21 +10,59 @@ export const PomodoroProvider = ({children}) => {
   const [isActive, setIsActive] = useState(false);
   const [userMinutes, setUserMinutes] = useState(25);
   const [userBreakMinutes, setUserBreakMinutes] = useState(5);
-  const [state, setState] = useState(true);
+  const [userLongBreakMinutes, setUserLongBreakMinutes] = useState(25);
+  const [state, setState] = useState(0);
   const [pomo, setPomo] = useState(1);
+  const [loop, setLoop] = useState(0);
   
   const endTimeRef = useRef(null);
   
   const switchSession = () => {
-    setState((prev) => !prev);
-    if (state) {
+    
+    let nextState;
+    let nextPomo = pomo;
+    
+    if (state === 0) {
+      if (pomo >= 4) {
+        nextState = 2;
+        nextPomo = 1;
+        console.log('Switching to long break');
+      } else {
+        nextState = 1;
+        
+        console.log(`Switching to short break, next pomo will be ${nextPomo + 1}`);
+      }
+    } else {
+      nextState = 0;
+      nextPomo = pomo + 1;
+      console.log(`Switching to focus mode, pomo ${nextPomo}`);
+    }
+
+    if (nextState === 2) {
+      setLoop(loop => loop + 3);
+    }
+    
+    setState(nextState);
+    setPomo(nextPomo);
+    
+    if (nextState === 0) {
+      setMinutes(userMinutes);
+    } else if (nextState === 1) {
       setMinutes(userBreakMinutes);
     } else {
-      setMinutes(userMinutes);
+      setMinutes(userLongBreakMinutes);
     }
+
     setSeconds(0);
     setIsActive(true);
-    endTimeRef.current = Date.now() + (state ? userBreakMinutes : userMinutes) * 60000;
+    
+    const minutesToUse = nextState === 0 
+      ? userMinutes 
+      : nextState === 1 
+        ? userBreakMinutes 
+        : userLongBreakMinutes;
+        
+    endTimeRef.current = Date.now() + minutesToUse * 60000;
   };
 
   const toggleTimer = () => {
@@ -53,9 +91,7 @@ export const PomodoroProvider = ({children}) => {
           setSeconds(0);
           endTimeRef.current = null;
           switchSession();
-          if (state == true) {
-            setPomo(pomo => pomo + 1);
-          }
+
           return;
         }
         
@@ -117,24 +153,30 @@ export const PomodoroProvider = ({children}) => {
   const resetTimer = () => {
     setIsActive(false);
     setSeconds(0);
-    if (state) {
+    if (state == 0) {
       if (userMinutes) {
         setMinutes(userMinutes);
       } else {
         setMinutes(25);
       }
-    } else {
+    } else if (state == 1) {
       if (userBreakMinutes) {
         setMinutes(userBreakMinutes);
       } else {
         setMinutes(5);
+      }
+    } else {
+      if (userLongBreakMinutes) {
+        setMinutes(userLongBreakMinutes);
+      } else {
+        setMinutes(25);
       }
     }
     endTimeRef.current = null;
   }
 
   const handleSetMinutes = () => {
-    if (state) {
+    if (state == 0) {
       if (userMinutes) {
         setMinutes(userMinutes);
       } else {
@@ -146,7 +188,7 @@ export const PomodoroProvider = ({children}) => {
   };
 
   const handleSetBreakMinutes = () => {
-    if (!state) {
+    if (state == 1) {
       if (userBreakMinutes) {
         setMinutes(userBreakMinutes);
       } else {
@@ -157,8 +199,20 @@ export const PomodoroProvider = ({children}) => {
     }
   }
 
+  const handleSetLongBreakMinutes = () => {
+    if (state == 2) {
+      if (userLongBreakMinutes) {
+        setMinutes(userLongBreakMinutes);
+      } else {
+        setMinutes(25);
+      }
+      setSeconds(0);
+      endTimeRefcurrent = null;
+    }
+  }
+
   const handleSetFocus = () => {
-    setState(true);
+    setState(0);
     setIsActive(false);
     if (userMinutes) {
       setMinutes(userMinutes);
@@ -170,12 +224,24 @@ export const PomodoroProvider = ({children}) => {
   }
 
   const handleSetBreak = () => {
-    setState(false);
+    setState(1);
     setIsActive(false);
     if (userBreakMinutes) {
       setMinutes(userBreakMinutes);
     } else {
       setMinutes(5);
+    }
+    setSeconds(0);
+    endTimeRef.current = null;
+  }
+
+  const handleSetLongBreak = () => {
+    setState(2);
+    setIsActive(false);
+    if (userLongBreakMinutes) {
+      setMinutes(userLongBreakMinutes);
+    } else {
+      setMinutes(25);
     }
     setSeconds(0);
     endTimeRef.current = null;
@@ -190,7 +256,9 @@ export const PomodoroProvider = ({children}) => {
         state,
         userMinutes,
         userBreakMinutes,
+        userLongBreakMinutes,
         pomo,
+        loop,
         toggleTimer,
         resetTimer,
         switchSession,
@@ -200,6 +268,9 @@ export const PomodoroProvider = ({children}) => {
         handleSetBreak,
         setUserMinutes,
         setUserBreakMinutes,
+        handleSetLongBreak,
+        handleSetLongBreakMinutes,
+        setUserLongBreakMinutes,
       }}
     >
       {children}
