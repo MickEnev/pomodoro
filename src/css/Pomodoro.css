@@ -16,8 +16,8 @@
     border: solid;
     border-width: 3.5px;
     border-color: black;
-    width: 400px;
-    max-width: 400px;
+    width: 450px;
+    max-width: 450px;
 }
 
 .timer-box .state {
@@ -44,6 +44,28 @@
 
 .button-box {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.start-reset-buttons {
+  display: flex;
+  align-items: center;
+
+}
+
+.start-reset-buttons .button-17 {
+  background-color: #e46f8691;
+}
+
+.state-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.state-buttons .button-17 {
+  background-color: #71b2bb86;
 }
 
 .control-box {
@@ -56,8 +78,8 @@
     border: solid;
     border-width: 3.5px;
     border-color: black;
-    width: 400px;
-    max-width: 400px;
+    width: 550px;
+    max-width: 550px;
     align-items: center;
     justify-content: center;
 }
@@ -68,16 +90,23 @@
 }
 
 .session-length-box {
-    margin-right: 40px;
+    margin-right: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .break-length-box {
+    margin-right: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.long-break-length-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 input {
@@ -138,6 +167,7 @@ input::-webkit-inner-spin-button {
   will-change: transform,opacity;
   z-index: 0;
   font-family: "Space Grotesk";
+  margin: 5px;
 }
 
 .button-17:hover {
