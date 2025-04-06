@@ -87,3 +87,4 @@ export default function Pomodoro() {
 // Add alarm sound
 // Add a way to reset pomos or keep track of highest pomo?
 // Mvp is definitley done tho
+// Add feature to change how many intervals are needed for a long break
