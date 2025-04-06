@@ -11,6 +11,7 @@ export const PomodoroProvider = ({children}) => {
   const [userMinutes, setUserMinutes] = useState(25);
   const [userBreakMinutes, setUserBreakMinutes] = useState(5);
   const [state, setState] = useState(true);
+  const [pomo, setPomo] = useState(1);
   
   const endTimeRef = useRef(null);
   
@@ -52,6 +53,9 @@ export const PomodoroProvider = ({children}) => {
           setSeconds(0);
           endTimeRef.current = null;
           switchSession();
+          if (state == true) {
+            setPomo(pomo => pomo + 1);
+          }
           return;
         }
         
@@ -186,6 +190,7 @@ export const PomodoroProvider = ({children}) => {
         state,
         userMinutes,
         userBreakMinutes,
+        pomo,
         toggleTimer,
         resetTimer,
         switchSession,

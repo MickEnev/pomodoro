@@ -30,7 +30,16 @@
 
 .timer-box h1 {
     color: black;
-    font-family: "DynaPuff";
+    font-family: "Space Grotesk";
+    margin-bottom: 15px;
+}
+
+.timer-box p {
+  color: black;
+  font-family: "Space Grotesk";
+  margin-top: 0px;
+  font-size: 15px;
+  opacity: 50%;
 }
 
 .button-box {
@@ -80,7 +89,7 @@ input {
     border: solid;
     border-width: 2px;
     border-radius: 5px;
-    font-family: "DynaPuff";
+    font-family: "Space Grotesk";
     background-color: #71b2bb;
     color: white;
     border-color: black;
@@ -108,7 +117,7 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
   display: inline-flex;
   fill: currentcolor;
-  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-family: "Space Grotesk";
   font-size: 14px;
   font-weight: 500;
   height: 48px;
@@ -128,7 +137,7 @@ input::-webkit-inner-spin-button {
   width: auto;
   will-change: transform,opacity;
   z-index: 0;
-  font-family: "DynaPuff";
+  font-family: "Space Grotesk";
 }
 
 .button-17:hover {

@@ -13,6 +13,7 @@ export default function Pomodoro() {
     handleSetFocus,
     handleSetBreak,
     userMinutes,
+    pomo,
     setUserMinutes,
     handleSetMinutes,
     userBreakMinutes,
@@ -25,6 +26,7 @@ export default function Pomodoro() {
       <div className='timer-box'>
         <h1 className="state">{state ? 'Focus' : 'Break'}</h1>
         <h1 className="time">{minutes < 10 ? `0${minutes}` : minutes} : {seconds < 10 ? `0${seconds}` : seconds}</h1>
+        <p># {pomo}</p>
         <div className='button-box'>
           <button className="button-17" onClick={toggleTimer}>{isActive ? 'Pause' : 'Start'}</button>
           <button className="button-17" onClick={resetTimer}>Reset</button>
@@ -59,6 +61,7 @@ export default function Pomodoro() {
 }
 
 
-// TODO: Add alarm sound
-// Clean up UI
-// Display state and time on tab TODO: Make it so that it updates correctly when on different tab
+// TODO:
+// Add alarm sound
+// Add a number to track which pomodoro it is 
+// Add long break hellooooo!!
