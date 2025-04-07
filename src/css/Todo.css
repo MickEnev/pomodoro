@@ -17,5 +17,15 @@
 .task {
     font-size: 50px;
     padding: 0;
-    margin: 0;
+    margin: 5px;
+    cursor: pointer;
+    background: rgba(104, 104, 104, 0.459);
+    border-radius: 5px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.task:hover {
+    opacity: 50%;
 }
